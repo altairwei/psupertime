@@ -113,11 +113,11 @@ psupertime <- function(x, y, y_labels=NULL, assay_type='logcounts',
 #' @keywords internal
 .check_x <- function(x, y, assay_type) {
 	# check input data looks ok
-	if (!(class(x) %in% c('SingleCellExperiment', 'matrix', 'dgCMatrix', 
+	if (!inherits(x, what = c('SingleCellExperiment', 'matrix', 'dgCMatrix', 
 			'dgRMatrix', 'dgTMatrix'))) {
 		stop('x must be either a SingleCellExperiment or a matrix of log counts')
 	}
-	if ( class(x)=='SingleCellExperiment') {
+	if (inherits(x, "SingleCellExperiment")) {
 		if ( !(assay_type %in% names(assays(x))) ) {
 			stop(paste0('SingleCellExperiment x does not contain the specified assay, ', assay_type))
 		}
@@ -295,9 +295,9 @@ psupertime <- function(x, y, y_labels=NULL, assay_type='logcounts',
 	# unpack
 	sel_genes 	= ps_params$sel_genes
 	if ( sel_genes=='hvg' ) {
-		if ( class(x)=='SingleCellExperiment' ) {
+		if ( inherits(x, what = "SingleCellExperiment") ) {
 			sce 		= x
-		} else if ( class(x) %in% c('matrix', 'dgCMatrix', 'dgRMatrix') ) {
+		} else if ( inherits(x, what = c('matrix', 'dgCMatrix', 'dgRMatrix')) ) {
 			sce 		= SingleCellExperiment(assays = list(logcounts = x))
 		} else { stop('class of x must be either matrix or SingleCellExperiment') }
 
@@ -415,9 +415,9 @@ psupertime <- function(x, y, y_labels=NULL, assay_type='logcounts',
 	}
 
 	# otherwise calculate it
-	if ( class(x)=='SingleCellExperiment' ) {
+	if ( inherits(x, "SingleCellExperiment") ) {
 		x_mat 		= assay(x, 'logcounts')
-	} else if ( class(x) %in% c('matrix', 'dgCMatrix', 'dgCMatrix') ) {
+	} else if ( inherits(x, c('matrix', 'dgCMatrix', 'dgCMatrix')) ) {
 		x_mat 		= x
 	} else { stop('x must be either SingleCellExperiment or (possibly sparse) matrix') }
 	prop_expressed 	= rowMeans( x_mat>0 )
@@ -473,9 +473,9 @@ psupertime <- function(x, y, y_labels=NULL, assay_type='logcounts',
 .make_x_data <- function(x, sel_genes, ps_params) {
 	message('processing data')
 	# get matrix
-	if ( class(x)=='SingleCellExperiment' ) {
+	if ( inherits(x, "SingleCellExperiment") ) {
 		x_data 		= assay(x, ps_params$assay_type)
-	} else if (class(x) %in% c('matrix', 'dgCMatrix', 'dgRMatrix', 'dgTMatrix')) {
+	} else if (inherits(x, what = c('matrix', 'dgCMatrix', 'dgRMatrix', 'dgTMatrix'))) {
 		x_data 		= x
 	} else {
 		stop('x must be either a SingleCellExperiment or a matrix of counts')
